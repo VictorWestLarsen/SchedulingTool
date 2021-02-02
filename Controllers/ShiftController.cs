@@ -25,11 +25,6 @@ namespace SchedulingTool.Controllers
             return View(await _context.Shifts.ToListAsync());
         }
 
-        public async Task<ICollection<Todo>> GetTodos()
-        {
-            return await _context.Todos.ToListAsync();
-        }
-
         // GET: Shift/Details/5
         public async Task<IActionResult> Details(int? id)
         {
@@ -47,10 +42,12 @@ namespace SchedulingTool.Controllers
 
             return View(shift);
         }
-
+        
         // GET: Shift/Create
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewBag.Employees = await _context.Employees.ToListAsync();
+            ViewBag.Todos = await _context.Todos.ToListAsync();
             return View();
         }
 
@@ -59,19 +56,21 @@ namespace SchedulingTool.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(string name, DateTime start, DateTime end, int employeeId, ICollection<Todo> todos)
+        public async Task<IActionResult> Create(Shift shift, List<int> todoIds)
         {
-            Shift shift = new Shift
-            {
-                Name = name,
-                ShiftStart = start,
-                ShiftEnd = end,
-                EmployeeId = employeeId,
-                Todos = todos
-            };
             if (ModelState.IsValid)
             {
-
+                var employee = await _context.Employees.FirstOrDefaultAsync(e => e.Id == shift.EmployeeId);
+                var todos = await _context.Todos.Where(x => todoIds.Contains(x.Id)).ToListAsync();
+                shift.ShiftTodos = new List<ShiftTodo>();
+                for (int i = 0; i < todos.Count; i++)
+                {
+                    if (employee.getAge() < todos[i].RequiredAge)
+                    {
+                        return View(shift);
+                    }
+                    shift.ShiftTodos.Add( new ShiftTodo { Shift = shift,  Todo = todos[i] });
+                }
                 _context.Add(shift);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -100,7 +99,7 @@ namespace SchedulingTool.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ShiftStart,ShiftEnd,EmployeeId")] Shift shift)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ShiftStart,ShiftEnd,EmployeeName")] Shift shift)
         {
             if (id != shift.Id)
             {

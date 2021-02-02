@@ -5,13 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\Todo\**" />
-    <Content Remove="Views\Todo\**" />
-    <EmbeddedResource Remove="Views\Todo\**" />
-    <None Remove="Views\Todo\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="5.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="5.0.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational.Design" Version="1.1.6" />
@@ -24,14 +17,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="5.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.EntityFrameworkCore" Version="5.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Utils" Version="5.0.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Views\Todo\Create.cshtml" />
-    <None Include="Views\Todo\Delete.cshtml" />
-    <None Include="Views\Todo\Details.cshtml" />
-    <None Include="Views\Todo\Edit.cshtml" />
-    <None Include="Views\Todo\Index.cshtml" />
   </ItemGroup>
 
 </Project>

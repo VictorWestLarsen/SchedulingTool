@@ -19,6 +19,9 @@ namespace SchedulingTool.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Shift>().ToTable("Shift");
+            modelBuilder.Entity<ShiftTodo>().HasKey(st => new { st.TodoId, st.ShiftId });
+            modelBuilder.Entity<ShiftTodo>().HasOne(st => st.Shift).WithMany(s => s.ShiftTodos).HasForeignKey(st => st.ShiftId);
+            modelBuilder.Entity<ShiftTodo>().HasOne(st => st.Todo).WithMany(t => t.ShiftTodos).HasForeignKey(st => st.TodoId);
             modelBuilder.Entity<Todo>().ToTable("Todo");
             modelBuilder.Entity<Employee>().ToTable("Employee");
         }
