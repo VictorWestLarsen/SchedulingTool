@@ -20,7 +20,7 @@ namespace SchedulingTool.Data
 
             var employees = new Employee[]
             {
-                new Employee{Id = 1, Name ="Victor W.", DOB =DateTime.Parse("17 April, 1995", new CultureInfo("dk-DK"))},
+                new Employee{Id = 1, Name ="Victor W.", DOB = DateTime.Parse("17 April, 1995", new CultureInfo("dk-DK"))},
                 new Employee{Id = 2, Name = "Line J.", DOB = DateTime.Parse("18 December, 1994",new CultureInfo("dk-DK"))},
                 new Employee{Id = 3, Name = "Emil J.", DOB = DateTime.Parse("13 August, 1999", new CultureInfo("dk-DK"))}
             };
