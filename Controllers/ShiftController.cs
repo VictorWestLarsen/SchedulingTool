@@ -26,18 +26,19 @@ namespace SchedulingTool.Controllers
             viewbags.Add(ViewBag.Todos = await _context.Todos.ToListAsync());
             return viewbags;
         }
-        public async Task<List<Object>> getTodosShifttodos()
+        public async Task<List<Object>> getTodosShifttodosEmployees()
         {
             List<Object> viewbags = new List<Object>();
             viewbags.Add(ViewBag.ShiftTodo = await _context.ShiftTodo.ToListAsync());
             viewbags.Add(ViewBag.Todos = await _context.Todos.ToListAsync());
+            viewbags.Add(ViewBag.Employees = await _context.Employees.ToListAsync());
             return viewbags;
         }
 
         // GET: Shift
         public async Task<IActionResult> Index()
         {
-            await getTodosShifttodos();
+            await getTodosShifttodosEmployees();
             return View(await _context.Shifts.ToListAsync());
         }
 
@@ -55,7 +56,7 @@ namespace SchedulingTool.Controllers
             {
                 return NotFound();
             }
-            await getTodosShifttodos();
+            await getTodosShifttodosEmployees();
             return View(shift);
         }
         // GET: Shift/Create

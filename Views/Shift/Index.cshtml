@@ -21,6 +21,12 @@
             <th>
                 @Html.DisplayNameFor(model => model.ShiftEnd)
             </th>
+            <th>
+                Medarbejder
+            </th>
+            <th>
+                Opgaver
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -37,20 +43,30 @@
                 @Html.DisplayFor(modelItem => item.ShiftEnd)
             </td>
             <td>
-            @foreach (var st in ViewBag.ShiftTodo)
-            {
-                if (item.Id == st.ShiftId)
+                @foreach (var e in ViewBag.Employees)
                 {
-                    @foreach (var t in ViewBag.Todos)
+                    if (item.EmployeeId == e.Id)
                     {
-                        if (st.TodoId == t.Id)
+                        @e.Name
+                    }
+                }
+            </td>
+            <td>
+                @foreach (var st in ViewBag.ShiftTodo)
+                {
+                    if (item.Id == st.ShiftId)
+                    {
+                        @foreach (var t in ViewBag.Todos)
                         {
-                            @t.Name
+                            if (st.TodoId == t.Id)
+                            {
+                                <ol>
+                                    @t.Name
+                                </ol>
+                            }
                         }
                     }
                 }
-            }
-                , 
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |

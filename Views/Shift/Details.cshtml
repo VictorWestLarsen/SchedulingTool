@@ -29,6 +29,16 @@
             @Html.DisplayFor(model => model.ShiftEnd)
         </dd>
         <dt class="col-sm-2">
+            Medarbejder
+        </dt>
+            @foreach (var e in ViewBag.Employees)
+            {
+                if (Model.EmployeeId == e.Id)
+                {
+                    <dd class="col-sm-10">@e.Name</dd>
+                }
+            }
+        <dt class="col-sm-2">
             Opgaver
         </dt>
         <dd>
@@ -40,12 +50,13 @@
                     {
                         if (st.TodoId == t.Id)
                         {
-                            @t.Name
+                            <ol>
+                                @t.Name
+                            </ol>
                         }
                     }
                 }
             }
-             ,
         </dd>
     </dl>
 </div>
