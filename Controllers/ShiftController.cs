@@ -19,6 +19,14 @@ namespace SchedulingTool.Controllers
             _context = context;
         }
 
+        public async Task<List<Object>> getTodosEmployees()
+        {
+            List<Object> viewbags = new List<Object>();
+            viewbags.Add(ViewBag.Employees = await _context.Employees.ToListAsync());
+            viewbags.Add(ViewBag.Todos = await _context.Todos.ToListAsync());
+            return viewbags;
+        }
+
         // GET: Shift
         public async Task<IActionResult> Index()
         {
@@ -42,12 +50,10 @@ namespace SchedulingTool.Controllers
 
             return View(shift);
         }
-        
         // GET: Shift/Create
         public async Task<IActionResult> Create()
         {
-            ViewBag.Employees = await _context.Employees.ToListAsync();
-            ViewBag.Todos = await _context.Todos.ToListAsync();
+            await getTodosEmployees();
             return View();
         }
 
@@ -67,6 +73,8 @@ namespace SchedulingTool.Controllers
                 {
                     if (employee.getAge() < todos[i].RequiredAge)
                     {
+                        await getTodosEmployees();
+                        ViewBag.AgeError = "Medarbejderen er ikke gammel nok til den valgte opgave";
                         return View(shift);
                     }
                     shift.ShiftTodos.Add( new ShiftTodo { Shift = shift,  Todo = todos[i] });
@@ -91,6 +99,7 @@ namespace SchedulingTool.Controllers
             {
                 return NotFound();
             }
+            await getTodosEmployees();
             return View(shift);
         }
 
@@ -99,7 +108,7 @@ namespace SchedulingTool.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,ShiftStart,ShiftEnd,EmployeeName")] Shift shift)
+        public async Task<IActionResult> Edit(int id, Shift shift, List<int> todoIds)
         {
             if (id != shift.Id)
             {
@@ -110,8 +119,11 @@ namespace SchedulingTool.Controllers
             {
                 try
                 {
-                    _context.Update(shift);
+                    await Create(shift, todoIds);
+                    var oldShift = await _context.Shifts.FirstOrDefaultAsync(s => s.Id == id);
+                    _context.Shifts.Remove(oldShift);
                     await _context.SaveChangesAsync();
+                    
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -126,6 +138,7 @@ namespace SchedulingTool.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
+            await getTodosEmployees();
             return View(shift);
         }
 
