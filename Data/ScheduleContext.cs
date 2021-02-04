@@ -15,6 +15,7 @@ namespace SchedulingTool.Data
         public DbSet<Shift> Shifts { get; set; }
         public DbSet<Todo> Todos { get; set; }
         public DbSet<Employee> Employees { get; set; }
+        public DbSet<ShiftTodo> ShiftTodo { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

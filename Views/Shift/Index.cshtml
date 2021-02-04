@@ -37,6 +37,21 @@
                 @Html.DisplayFor(modelItem => item.ShiftEnd)
             </td>
             <td>
+            @foreach (var st in ViewBag.ShiftTodo)
+            {
+                if (item.Id == st.ShiftId)
+                {
+                    @foreach (var t in ViewBag.Todos)
+                    {
+                        if (st.TodoId == t.Id)
+                        {
+                            @t.Name
+                        }
+                    }
+                }
+            }
+            </td>
+            <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
